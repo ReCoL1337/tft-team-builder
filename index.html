@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFT Team Builder - Set 16</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TFT Team Builder</h1>
+            <p class="subtitle">Set 16</p>
+        </header>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2>Champions</h2>
+                <input type="text" class="search-box" id="searchInput" placeholder="Search champions...">
+                <div class="champions-list" id="championsList"></div>
+            </div>
+
+            <div class="right-column">
+                <div class="panel">
+                    <h2>Your Team</h2>
+                    <div class="controls">
+                        <button class="btn" onclick="clearBoard()">Clear Board</button>
+                        <button class="btn" onclick="saveTeam()">Save Team</button>
+                        <button class="btn" onclick="loadTeam()">Load Team</button>
+                    </div>
+                    <div id="hexBoard"></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="panel">
+                        <h2>Synergies</h2>
+                        <div id="synergiesContainer" class="synergy-display">
+                            <div class="empty-state">Add champions to see synergies</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h2>Team Stats</h2>
+                        <div id="statsContainer">
+                            <div class="empty-state">No champions selected</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="champions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
