@@ -3,7 +3,7 @@ const getChampionIcon = (name) => {
   // Convert champion name to the format used in Community Dragon
   // Examples: "Kog'Maw" -> "kogmaw", "Lucian & Senna" -> "lucian", "Dr. Mundo" -> "drmundo"
   let iconName = name.toLowerCase()
-    .replace("Zaahen", "zaheen")
+    .replace("zaahen", "zaheen")
     .replace(/-/g, '')
     .replace(/'/g, '')           // Remove apostrophes
     .replace(/\.\s*/g, '')      // Remove "Dr." prefix

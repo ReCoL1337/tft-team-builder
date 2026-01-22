@@ -23,18 +23,17 @@ function renderChampionsList() {
     
     list.innerHTML = sortedCosts.map(cost => `
         <div class="cost-row">
-            <div class="cost-label">Cost ${cost}</div>
+            <div class="cost-label">${cost} Cost</div>
             <div class="champions-row">
                 ${groupedByCost[cost].map(champ => `
                     <div class="champion-btn cost-${champ.cost}" 
                          draggable="true" 
                          data-champ="${JSON.stringify(champ).replace(/"/g, '&quot;')}"
-                         title="${champ.traits.join(', ')}">
+                         title="${champ.name} - ${champ.traits.join(', ')}">
                         <img src="${getChampionIcon(champ.name)}" 
                              alt="${champ.name}" 
                              class="champion-icon"
                              onerror="this.style.display='none';">
-                        <span class="champion-name">${champ.name}</span>
                     </div>
                 `).join('')}
             </div>
@@ -97,7 +96,7 @@ function renderBoard() {
     });
 
     updateSynergies();
-    updateStats();
+    //updateStats();
 }
 
 function handleRightClick(e) {
@@ -208,7 +207,7 @@ function updateSynergies() {
             </div>`;
         }).join('');
 
-    container.innerHTML = `<div class="synergy-grid">${synergiesHtml}</div>`;
+    container.innerHTML = synergiesHtml;
 }
 
 function updateStats() {
@@ -238,14 +237,6 @@ function updateStats() {
         <div class="stat-row">
             <span class="stat-label">Total Cost</span>
             <span class="stat-value">${totalCost}g</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Avg Cost</span>
-            <span class="stat-value">${avgCost}★</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Cost Breakdown</span>
-            <span class="stat-value">${costBreakdown}</span>
         </div>
     `;
 }

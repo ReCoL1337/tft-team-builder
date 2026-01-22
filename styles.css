@@ -104,7 +104,7 @@ h1 {
     padding: 10px 12px;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 0.85rem;
     font-weight: 600;
     display: flex;
@@ -224,8 +224,8 @@ h1 {
 .cost-7 .champion-icon { border-color: #6b5a3d; }
 
 .champion-icon {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     border-radius: 8px;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.2);
