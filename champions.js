@@ -1,3 +1,18 @@
+// Helper function to get champion icon URL
+const getChampionIcon = (name) => {
+  // Convert champion name to the format used in Community Dragon
+  // Examples: "Kog'Maw" -> "kogmaw", "Lucian & Senna" -> "lucian", "Dr. Mundo" -> "drmundo"
+  let iconName = name.toLowerCase()
+    .replace(/-/g, '')
+    .replace(/'/g, '')           // Remove apostrophes
+    .replace(/\.\s*/g, '')      // Remove "Dr." prefix
+    .replace(/\s*&\s*.+$/, '')  // Remove "& Senna" part
+    .replace(/\s+/g, '');        // Remove all spaces
+
+  return `https://raw.communitydragon.org/latest/game/assets/ux/tft/championsplashes/patching/tft16_${iconName}_square.tft_set16.png`;
+};
+
+
 const champions = [
   // 1-cost champions
   { name: "Anivia", cost: 1, traits: ["Freljord", "Invoker"] },
@@ -105,7 +120,7 @@ const champions = [
 
   // 7-cost champions
   { name: "Aurelion Sol", cost: 7, traits: ["Targon", "Star Forger"], unlockable: true },
-  { name: "Baron Nashor", cost: 7, traits: ["Void", "Riftscourge"], unlockable: true },
+  { name: "Baron Nashor", cost: 7, traits: ["Void", "Void", "Riftscourge"], unlockable: true },
   { name: "Brock", cost: 7, traits: ["Ixtal"], unlockable: true },
   { name: "Ryze", cost: 7, traits: ["Rune Mage"], unlockable: true },
   { name: "Sylas", cost: 7, traits: ["Chainbreaker", "Arcanist", "Defender"], unlockable: true },

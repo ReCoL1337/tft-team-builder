@@ -118,6 +118,7 @@ h1 {
 .cost-3 { background: #3d5a6b; color: #e0e0e0; }
 .cost-4 { background: #6b3d6b; color: #e0e0e0; }
 .cost-5 { background: #6b5a3d; color: #e0e0e0; }
+.cost-7 { background: #6b5a3d; color: #e0e0e0; }
 
 .controls {
     display: flex;
@@ -351,4 +352,85 @@ h1 {
 
 .drag-over {
     filter: brightness(1.2);
+}
+/* Champion icon styles */
+.champion-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: grab;
+    transition: all 0.2s;
+}
+
+.champion-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s;
+    pointer-events: none;
+}
+
+.champion-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.champion-btn:active {
+    cursor: grabbing;
+}
+
+.cost-1, .cost-2, .cost-3, .cost-4, .cost-5, .cost-7 { 
+    background: transparent;
+}
+
+.cost-1 .champion-icon { border-color: #5a5a5a; }
+.cost-2 .champion-icon { border-color: #3d6b4d; }
+.cost-3 .champion-icon { border-color: #3d5a6b; }
+.cost-4 .champion-icon { border-color: #6b3d6b; }
+.cost-5 .champion-icon { border-color: #6b5a3d; }
+.cost-7 .champion-icon { border-color: #6b5a3d; }
+
+.champion-name {
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+/* Board champion styles */
+.board-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.board-champion-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.board-champion-name {
+    font-size: 9px;
+    text-align: center;
+    line-height: 1.1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.board-slot.occupied {
+    padding: 4px;
 }
