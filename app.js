@@ -215,14 +215,6 @@ function updateStats() {
             <span class="stat-label">Total Cost</span>
             <span class="stat-value">${totalCost}g</span>
         </div>
-        <div class="stat-row">
-            <span class="stat-label">Avg Cost</span>
-            <span class="stat-value">${avgCost}★</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Cost Breakdown</span>
-            <span class="stat-value">${costBreakdown}</span>
-        </div>
     `;
 }
 
