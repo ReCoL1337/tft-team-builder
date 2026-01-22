@@ -14,35 +14,39 @@
         </header>
 
         <div class="main-grid">
-            <div class="panel">
-                <h2>Champions</h2>
-                <input type="text" class="search-box" id="searchInput" placeholder="Search champions...">
-                <div class="champions-list" id="championsList"></div>
-            </div>
+            <!-- Left: Synergies Panel -->
+            <aside class="panel synergies-panel">
+                <h2>Active Synergies</h2>
+                <div id="synergiesContainer" class="synergies-list">
+                    <div class="empty-state">Add champions to see synergies</div>
+                </div>
+            </aside>
 
+            <!-- Right: Board and Champions -->
             <div class="right-column">
-                <div class="panel">
+                <!-- Board at the top -->
+                <div class="panel board-panel">
                     <h2>Your Team</h2>
                     <div class="controls">
                         <button class="btn" onclick="clearBoard()">Clear Board</button>
                         <button class="btn" onclick="saveTeam()">Save Team</button>
                         <button class="btn" onclick="loadTeam()">Load Team</button>
                     </div>
-                    <div id="hexBoard"></div>
+                    <div id="board" class="hexagon-grid-container"></div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="panel">
-                        <h2>Synergies</h2>
-                        <div id="synergiesContainer" class="synergy-display">
-                            <div class="empty-state">Add champions to see synergies</div>
-                        </div>
+                <!-- Bottom row: Champions and Items -->
+                <div class="bottom-row">
+                    <div class="panel champions-panel">
+                        <h2>Champions</h2>
+                        <input type="text" id="searchInput" class="search-box" placeholder="Search champions...">
+                        <div id="championsList" class="champions-grid"></div>
                     </div>
-
-                    <div class="panel">
-                        <h2>Team Stats</h2>
-                        <div id="statsContainer">
-                            <div class="empty-state">No champions selected</div>
+                    
+                    <div class="panel items-panel">
+                        <h2>Items</h2>
+                        <div id="itemsContainer" class="items-grid">
+                            <div class="empty-state">Items coming soon</div>
                         </div>
                     </div>
                 </div>

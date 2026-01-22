@@ -10,29 +10,49 @@ function init() {
 
 function renderChampionsList() {
     const list = document.getElementById('championsList');
-    list.innerHTML = filteredChampions.map(champ =>
-        `<div class="champion-btn cost-${champ.cost}" draggable="true"
-             data-champ='${JSON.stringify(champ)}'
-             title="${champ.traits.join(', ')}">
-            <img src="${getChampionIcon(champ.name)}" 
-                 alt="${champ.name}" 
-                 class="champion-icon"
-                 onerror="this.style.display='none';">
-            <span class="champion-name">${champ.name}</span>
-        </div>`
-    ).join('');
+    
+    // Group champions by cost
+    const groupedByCost = filteredChampions.reduce((acc, champ) => {
+        if (!acc[champ.cost]) acc[champ.cost] = [];
+        acc[champ.cost].push(champ);
+        return acc;
+    }, {});
+    
+    // Sort costs and render rows
+    const sortedCosts = Object.keys(groupedByCost).sort((a, b) => a - b);
+    
+    list.innerHTML = sortedCosts.map(cost => `
+        <div class="cost-row">
+            <div class="cost-label">Cost ${cost}</div>
+            <div class="champions-row">
+                ${groupedByCost[cost].map(champ => `
+                    <div class="champion-btn cost-${champ.cost}" 
+                         draggable="true" 
+                         data-champ="${JSON.stringify(champ).replace(/"/g, '&quot;')}"
+                         title="${champ.traits.join(', ')}">
+                        <img src="${getChampionIcon(champ.name)}" 
+                             alt="${champ.name}" 
+                             class="champion-icon"
+                             onerror="this.style.display='none';">
+                        <span class="champion-name">${champ.name}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
 
+    // Re-attach event listeners
     document.querySelectorAll('.champion-btn').forEach(btn => {
         btn.addEventListener('dragstart', (e) => {
             draggedData = {
                 type: 'champion',
-                champ: JSON.parse(e.target.getAttribute('data-champ'))
+                champ: JSON.parse(e.currentTarget.getAttribute('data-champ'))
             };
             e.dataTransfer.effectAllowed = 'move';
         });
 
         btn.addEventListener('click', (e) => {
-            const champ = JSON.parse(e.target.getAttribute('data-champ'));
+            const champ = JSON.parse(e.currentTarget.getAttribute('data-champ'));
             const firstEmpty = board.findIndex(slot => slot === null);
             if (firstEmpty !== -1) {
                 board[firstEmpty] = champ;
@@ -43,7 +63,7 @@ function renderChampionsList() {
 }
 
 function renderBoard() {
-    const boardEl = document.getElementById('hexBoard');
+    const boardEl = document.getElementById('board');
 
     let html = '<ul class="hexagon-grid-container">';
     for (let i = 0; i < 28; i++) {
