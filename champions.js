@@ -154,8 +154,8 @@ const synergies = {
   'Piltover': { thresholds: [3, 5, 7, 9], type: 'origin' },
   'Shadow Isles': { thresholds: [2, 4, 6, 8], type: 'origin' },
   'Shurima': { thresholds: [2, 4, 6], type: 'origin' },
-  'Targon': { thresholds: [2, 4, 6], type: 'origin' },
-  'Void': { thresholds: [3, 5, 7], type: 'origin' },
+  'Targon': { thresholds: [1], type: 'origin' },
+  'Void': { thresholds: [3, 5, 7], type: 'origin' },  
   'Yordle': { thresholds: [2, 4, 6], type: 'origin' },
   'Zaun': { thresholds: [2, 4, 6], type: 'origin' },
 

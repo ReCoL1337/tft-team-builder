@@ -1,26 +1,57 @@
 let board = new Array(28).fill(null);
 let filteredChampions = [...champions];
 let draggedData = null;
+let searchTimeout;
 
 function init() {
     renderChampionsList();
     renderBoard();
-    document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => handleSearch(e), 200);
+    });
+
+    setupChampionsListListeners();
+}
+
+function setupChampionsListListeners() {
+    const list = document.getElementById('championsList');
+
+    list.addEventListener('dragstart', (e) => {
+        if (e.target.classList.contains('champion-btn')) {
+            draggedData = {
+                type: 'champion',
+                champ: JSON.parse(e.target.getAttribute('data-champ'))
+            };
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    list.addEventListener('click', (e) => {
+        const btn = e.target.closest('.champion-btn');
+        if (btn) {
+            const champ = JSON.parse(btn.getAttribute('data-champ'));
+            const firstEmpty = board.findIndex(slot => slot === null);
+            if (firstEmpty !== -1) {
+                board[firstEmpty] = champ;
+                renderBoard();
+            }
+        }
+    });
 }
 
 function renderChampionsList() {
     const list = document.getElementById('championsList');
-    
-    // Group champions by cost
+
     const groupedByCost = filteredChampions.reduce((acc, champ) => {
         if (!acc[champ.cost]) acc[champ.cost] = [];
         acc[champ.cost].push(champ);
         return acc;
     }, {});
-    
-    // Sort costs and render rows
+
     const sortedCosts = Object.keys(groupedByCost).sort((a, b) => a - b);
-    
+
     list.innerHTML = sortedCosts.map(cost => `
         <div class="cost-row">
             <div class="cost-label">${cost} Cost</div>
@@ -39,52 +70,23 @@ function renderChampionsList() {
             </div>
         </div>
     `).join('');
-
-    // Re-attach event listeners
-    document.querySelectorAll('.champion-btn').forEach(btn => {
-        btn.addEventListener('dragstart', (e) => {
-            draggedData = {
-                type: 'champion',
-                champ: JSON.parse(e.currentTarget.getAttribute('data-champ'))
-            };
-            e.dataTransfer.effectAllowed = 'move';
-        });
-
-        btn.addEventListener('click', (e) => {
-            const champ = JSON.parse(e.currentTarget.getAttribute('data-champ'));
-            const firstEmpty = board.findIndex(slot => slot === null);
-            if (firstEmpty !== -1) {
-                board[firstEmpty] = champ;
-                renderBoard();
-            }
-        });
-    });
 }
 
 function renderBoard() {
     const boardEl = document.getElementById('board');
-
     let html = '<ul class="hexagon-grid-container">';
+
     for (let i = 0; i < 28; i++) {
         const champ = board[i];
-
-        html += `
-        <li class="hexagon" data-slot="${i}" draggable="${champ ? 'true' : 'false'}">
-            <div class="hexagon-inner">
+        html += `<li class="hexagon ${champ ? 'has-champion-outer cost-' + champ.cost : ''}" data-slot="${i}" draggable="${champ ? 'true' : 'false'}">
+            <div class="hexagon-inner ${champ ? 'has-champion cost-' + champ.cost : ''}">
                 ${champ ? `
-                    <span class="hexagon-name">${champ.name}</span>
-                    <span class="hexagon-metric-label">${champ.traits.slice(0, 2).join(' ')}</span>
-                    <span class="hexagon-featured-score">${champ.cost}</span>
-                ` : `
-                    <span class="hexagon-name">&nbsp;</span>
-                    <span class="hexagon-metric-label">&nbsp;</span>
-                    <span class="hexagon-featured-score">&nbsp;</span>
-                `}
+                    <img src="${getChampionIcon(champ.name)}" alt="${champ.name}" class="board-champion-icon" onerror="this.style.display='none'">
+                ` : ''}
             </div>
         </li>`;
     }
     html += '</ul>';
-
     boardEl.innerHTML = html;
 
     document.querySelectorAll('.hexagon').forEach(slot => {
@@ -103,7 +105,7 @@ function handleRightClick(e) {
     e.preventDefault();
     const slotEl = e.target.closest('.hexagon');
     if (!slotEl) return;
-    
+
     const slotIdx = parseInt(slotEl.getAttribute('data-slot'), 10);
     if (board[slotIdx]) {
         board[slotIdx] = null;
@@ -165,49 +167,56 @@ function clearBoard() {
 }
 
 function updateSynergies() {
-    const container = document.getElementById('synergiesContainer');
-    const activeChamps = board.filter(c => c !== null);
+  const container = document.getElementById('synergiesContainer');
+  const activeChamps = board.filter(c => c !== null);
 
-    if (activeChamps.length === 0) {
-        container.innerHTML = '<div class="empty-state">Add champions to see synergies</div>';
-        return;
-    }
+  if (activeChamps.length === 0) {
+    container.innerHTML = '<div class="empty-state">Add champions to see synergies</div>';
+    return;
+  }
 
-    // Get unique champions only
-    const uniqueChamps = [];
-    const seenNames = new Set();
-    
-    activeChamps.forEach(champ => {
-        if (!seenNames.has(champ.name)) {
-            uniqueChamps.push(champ);
-            seenNames.add(champ.name);
+  const uniqueChamps = [...new Map(activeChamps.map(c => [c.name, c])).values()];
+
+  const traitCounts = {};
+  uniqueChamps.forEach(champ => {
+    champ.traits.forEach(trait => {
+      traitCounts[trait] = (traitCounts[trait] || 0) + 1;
+    });
+  });
+
+  const synergiesHtml = Object.entries(traitCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([trait, count]) => {
+      const synergy = synergies[trait];
+      if (!synergy) return '';
+      
+      const thresholds = synergy.thresholds;
+      
+      let currentThresholdIndex = -1;
+      let displayThreshold = thresholds[0];
+      
+      for (let i = 0; i < thresholds.length; i++) {
+        if (count >= thresholds[i]) {
+          currentThresholdIndex = i;
+          displayThreshold = thresholds[i];
+        } else {
+          displayThreshold = thresholds[i];
+          break;
         }
-    });
+      }
 
-    const traitCounts = {};
-    uniqueChamps.forEach(champ => {
-        champ.traits.forEach(trait => {
-            traitCounts[trait] = (traitCounts[trait] || 0) + 1;
-        });
-    });
+      const activeClass = currentThresholdIndex >= 0 
+        ? `active-${Math.min(currentThresholdIndex + 1, 3)}` 
+        : 'inactive';
 
-    const synergiesHtml = Object.entries(traitCounts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([trait, count]) => {
-            const synergy = synergies[trait];
-            const thresholds = synergy ? synergy.thresholds : [];
-            const activeLevel = thresholds.findIndex(t => count >= t) + 1;
-            const activeClass = activeLevel > 0 ? `active-${activeLevel}` : 'inactive';
+      return `<div class="synergy-badge ${activeClass}">
+        ${trait}
+        <span class="synergy-level">${count}/${displayThreshold}</span>
+      </div>`;
+    })
+    .join('');
 
-            return `<div class="synergy-badge ${activeClass}">
-                ${trait}
-                <span class="synergy-level">
-                  ${count}/${thresholds[thresholds.length - 1] || count}
-                </span>
-            </div>`;
-        }).join('');
-
-    container.innerHTML = synergiesHtml;
+  container.innerHTML = synergiesHtml;
 }
 
 function updateStats() {
