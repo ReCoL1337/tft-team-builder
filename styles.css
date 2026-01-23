@@ -642,3 +642,106 @@ h1 {
 .drag-over {
   filter: brightness(1.2);
 }
+
+
+.team-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.team-panel-content {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-panel-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    min-width: 400px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.team-panel-content h3 {
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-heading);
+    font-size: 1.5rem;
+}
+
+.team-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-input-bg);
+    color: var(--color-text-bright);
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-lg);
+    outline: none;
+}
+
+.team-input:focus {
+    border-color: var(--color-input-focus);
+}
+
+.team-panel-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: var(--color-input-bg);
+}
+
+.btn-cancel:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.saved-teams-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.saved-team-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: var(--color-input-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-input-border);
+}
+
+.team-name {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.team-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn-danger {
+    background: #6b3d3d;
+}
+
+.btn-danger:hover {
+    background: #7b4d4d;
+}

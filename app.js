@@ -250,38 +250,77 @@ function updateStats() {
     `;
 }
 
-function saveTeam() {
-    const teamName = prompt('Enter team name:');
-    if (teamName && teamName.trim()) {
-        const teams = JSON.parse(localStorage.getItem('tftTeams')) || {};
-        teams[teamName] = {
-            board: board.map(c => c ? c.name : null),
-            savedAt: new Date().toLocaleString()
-        };
-        localStorage.setItem('tftTeams', JSON.stringify(teams));
-        alert('Team saved!');
-    }
+function toggleSavePanel() {
+    const panel = document.getElementById('savePanel');
+    panel.style.display = 'flex';
+    document.getElementById('teamNameInput').value = '';
+    document.getElementById('teamNameInput').focus();
 }
 
-function loadTeam() {
-    const teams = JSON.parse(localStorage.getItem('tftTeams')) || {};
-    const teamNames = Object.keys(teams);
+function closeSavePanel() {
+    document.getElementById('savePanel').style.display = 'none';
+}
 
-    if (teamNames.length === 0) {
-        alert('No saved teams');
+function saveTeamConfirm() {
+    const teamName = document.getElementById('teamNameInput').value.trim();
+    if (!teamName) {
+        return;
+    }
+    const teams = JSON.parse(localStorage.getItem('teams') || '{}');
+    teams[teamName] = board;
+    localStorage.setItem('teams', JSON.stringify(teams));
+    closeSavePanel();
+}
+
+function toggleLoadPanel() {
+    const panel = document.getElementById('loadPanel');
+    const teams = JSON.parse(localStorage.getItem('teams') || '{}');
+
+    const list = document.getElementById('savedTeamsList');
+
+    if (Object.keys(teams).length === 0) {
+        list.innerHTML = '<div class="empty-state">No saved teams</div>';
+        panel.style.display = 'flex';
         return;
     }
 
-    const name = prompt(
-        'Available teams:\n' + teamNames.join('\n') +
-        '\n\nEnter team name to load:'
-    );
-    if (name && teams[name]) {
-        board = teams[name].board.map(champName => {
-            if (!champName) return null;
-            return champions.find(c => c.name === champName);
-        });
+    list.innerHTML = Object.keys(teams).map(name => {
+        const escapedName = name.replace(/'/g, "\\'");
+        return `
+        <div class="saved-team-item">
+            <span class="team-name">${name}</span>
+            <div class="team-actions">
+                <button class="btn btn-small" onclick="loadTeamByName('${escapedName}')">Load</button>
+                <button class="btn btn-small btn-danger" onclick="deleteTeam('${escapedName}')">Delete</button>
+            </div>
+        </div>
+    `;
+    }).join('');
+
+    panel.style.display = 'flex';
+}
+
+function closeLoadPanel() {
+    document.getElementById('loadPanel').style.display = 'none';
+}
+
+function loadTeamByName(name) {
+    const teams = JSON.parse(localStorage.getItem('teams') || '{}');
+    if (teams[name]) {
+        board = teams[name];
         renderBoard();
+        closeLoadPanel();
+    }
+}
+
+function deleteTeam(name) {
+    const teams = JSON.parse(localStorage.getItem('teams') || '{}');
+    delete teams[name];
+    localStorage.setItem('teams', JSON.stringify(teams));
+    if (Object.keys(teams).length === 0) {
+        closeLoadPanel();
+    } else {
+        toggleLoadPanel();
     }
 }
 

@@ -29,8 +29,8 @@
                     <h2>Your Team</h2>
                     <div class="controls">
                         <button class="btn" onclick="clearBoard()">Clear Board</button>
-                        <button class="btn" onclick="saveTeam()">Save Team</button>
-                        <button class="btn" onclick="loadTeam()">Load Team</button>
+                        <button class="btn" onclick="toggleSavePanel()">Save Team</button>
+                        <button class="btn" onclick="toggleLoadPanel()">Load Team</button>
                     </div>
                     <div id="board" class="hexagon-grid-container"></div>
                 </div>
@@ -51,6 +51,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+
+    <div id="savePanel" class="team-panel" style="display: none;">
+        <div class="team-panel-content">
+            <h3>Save Team</h3>
+            <input type="text" id="teamNameInput" class="team-input" placeholder="Enter team name">
+            <div class="team-panel-buttons">
+                <button class="btn" onclick="saveTeamConfirm()">Save</button>
+                <button class="btn btn-cancel" onclick="closeSavePanel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadPanel" class="team-panel" style="display: none;">
+        <div class="team-panel-content">
+            <h3>Load Team</h3>
+            <div id="savedTeamsList" class="saved-teams-list"></div>
+            <button class="btn btn-cancel" onclick="closeLoadPanel()">Close</button>
         </div>
     </div>
 
