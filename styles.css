@@ -745,3 +745,100 @@ h1 {
 .btn-danger:hover {
     background: #7b4d4d;
 }
+
+
+@media (max-width: 1200px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .synergies-panel {
+        width: 100%;
+        order: 2;
+    }
+
+    .synergies-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        max-height: none;
+    }
+    
+    .synergy-badge {
+        flex: 1 1 160px;
+    }
+}
+
+@media (max-width: 950px) {
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .main-grid {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .board-panel {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        display: block;
+        width: 100%;
+        padding-bottom: 20px;
+        min-height: 300px;
+    }
+
+    .hexagon-grid-container {
+        transform: scale(0.75);
+        transform-origin: top left;
+        width: 880px; 
+        
+        margin-bottom: 0; 
+        margin-left: 10px;
+        
+        height: 350px; 
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: var(--spacing-xs);
+    }
+
+    .bottom-row {
+        grid-template-columns: 1fr;
+    }
+
+    .champion-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .champion-name {
+        font-size: 10px;
+        max-width: 50px;
+    }
+
+    .panel h2 {
+        font-size: 1.1rem;
+    }
+    
+    .controls .btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
